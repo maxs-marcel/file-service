@@ -4,6 +4,7 @@ import cn.maxiangshun.file.entity.vo.UploadVO;
 import cn.maxiangshun.file.service.FileInfoService;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +47,14 @@ public class FileController {
                                  HttpServletResponse response) {
         List<UploadVO> uploadVOList = fileInfoService.multipleUpload(files, createUserId, response);
         return JSONObject.toJSONString(uploadVOList);
+    }
+
+    /**
+     * 根据文件ids获取文件列表
+     */
+    @GetMapping("/getByIds")
+    public String getByIds(@RequestParam("fileIds") List<String> fileIds){
+        List<UploadVO> resultList = fileInfoService.getByIds(fileIds);
+        return JSONObject.toJSONString(resultList);
     }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -124,5 +125,29 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
                 .creatorId(createUserId)
                 .delFlag(0)
                 .build();
+    }
+
+    /**
+     * 根据文件ids获取文件列表
+     * @param fileIds 文件ids
+     * @return 文件列表
+     */
+    @Override
+    public List<UploadVO> getByIds(List<String> fileIds) {
+        if (CollectionUtils.isEmpty(fileIds)) {
+            return Lists.newArrayList();
+        }
+        List<FileInfo> fileInfoList = fileInfoMapper.selectBatchIds(fileIds);
+        List<UploadVO> resultVOList = Lists.newArrayList();
+        for (FileInfo fileInfo : fileInfoList) {
+            UploadVO uploadVO = UploadVO.builder()
+                    .fileId(fileInfo.getFileId())
+                    .fileSourceName(fileInfo.getFileSourceName())
+                    .fileFullName(fileInfo.getFileFullName())
+                    .filePath(fileInfo.getFilePath())
+                    .build();
+            resultVOList.add(uploadVO);
+        }
+        return resultVOList;
     }
 }

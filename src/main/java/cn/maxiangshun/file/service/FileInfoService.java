@@ -24,4 +24,11 @@ public interface FileInfoService extends IService<FileInfo> {
      * 多文件上传
      */
     List<UploadVO> multipleUpload(MultipartFile[] files, String createUserId, HttpServletResponse response);
+
+    /**
+     * 根据文件ids获取文件列表
+     * @param fileIds 文件ids
+     * @return 文件列表
+     */
+    List<UploadVO> getByIds(List<String> fileIds);
 }
